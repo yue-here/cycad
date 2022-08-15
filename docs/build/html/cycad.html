@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cycad module &mdash; cycad 0.0.5a documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> cycad
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">cycad module</a></li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cycad</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>cycad module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cycad.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-cycad">
+<span id="cycad-module"></span><h1>cycad module<a class="headerlink" href="#module-cycad" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="cycad.cycad">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">cycad.</span></span><span class="sig-name descname"><span class="pre">cycad</span></span><a class="headerlink" href="#cycad.cycad" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Add docstring</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.autocorrelate">
+<span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_subtract</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.autocorrelate" title="Permalink to this definition"></a></dt>
+<dd><p>Apply autocorrelation to self.df to generate correlation matrix</p>
+<dl class="simple">
+<dt>samples<span class="classifier">int</span></dt><dd><p>Number of samples to use for downsampling</p>
+</dd>
+<dt>bkg_subtract<span class="classifier">bool</span></dt><dd><p>Whether to apply baseline correction first</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.baseline_arPLS">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">baseline_arPLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.baseline_arPLS" title="Permalink to this definition"></a></dt>
+<dd><p>Baseline correction routine</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.bkg_subtract">
+<span class="sig-name descname"><span class="pre">bkg_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.bkg_subtract" title="Permalink to this definition"></a></dt>
+<dd><p>Apply baseline correction to a dataframe</p>
+<dl class="simple">
+<dt>df<span class="classifier">pandas.DataFrame</span></dt><dd><p>Dataframe to be corrected</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.generate_distance_matrix">
+<span class="sig-name descname"><span class="pre">generate_distance_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.generate_distance_matrix" title="Permalink to this definition"></a></dt>
+<dd><p>Generate a distance matrix from a single dimensional array, e.g. e-chem data</p>
+<p>TODO: add in data file reading</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.get_skip">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_skip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.get_skip" title="Permalink to this definition"></a></dt>
+<dd><p>Get the number of rows to skip in a mpt file</p>
+<dl class="simple">
+<dt>file<span class="classifier">str</span></dt><dd><p>Path to the mpt file</p>
+</dd>
+<dt>encoding<span class="classifier">str</span></dt><dd><p>Encoding of the mpt file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.natural_sort">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">natural_sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.natural_sort" title="Permalink to this definition"></a></dt>
+<dd><p>Sort a list of strings in a human friendly way.</p>
+<dl class="simple">
+<dt>l<span class="classifier">list</span></dt><dd><p>List of strings to be sorted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.parse_filename">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.parse_filename" title="Permalink to this definition"></a></dt>
+<dd><p>Parse a file name to get the sample name.
+Overwrite for specific data if you want to use the dataframe directly</p>
+<dl class="simple">
+<dt>filename<span class="classifier">str</span></dt><dd><p>File name to be parsed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the full correlation matrix and the components</p>
+<dl class="simple">
+<dt>qmin<span class="classifier">float</span></dt><dd><p>Minimum quantile to use for the color scale</p>
+</dd>
+<dt>qmax<span class="classifier">float</span></dt><dd><p>Maximum quantile to use for the color scale</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.read_data">
+<span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parse_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_data" title="Permalink to this definition"></a></dt>
+<dd><p>Read data from a list of files found by read_folder.
+Takes the first column of the first file as the x-values.
+Filetype is specified in read_folder.</p>
+<dl class="simple">
+<dt>parse_names<span class="classifier">bool</span></dt><dd><p>If True, parse file names for column headings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.read_data_csv">
+<span class="sig-name descname"><span class="pre">read_data_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_data_csv" title="Permalink to this definition"></a></dt>
+<dd><p>Read data from a single csv file</p>
+<dl class="simple">
+<dt>path<span class="classifier">str</span></dt><dd><p>Path to the csv file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.read_echem_mpt">
+<span class="sig-name descname"><span class="pre">read_echem_mpt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">','</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_echem_mpt" title="Permalink to this definition"></a></dt>
+<dd><p>Read cycling data from an echem mpt file
+If this is called multiple times, the data will be concatenated
+The data are resampled to the size of the data dataframe in self.generate_distance_matrix()</p>
+<dl class="simple">
+<dt>path<span class="classifier">str</span></dt><dd><p>Path to the mpt file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.read_folder">
+<span class="sig-name descname"><span class="pre">read_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_folder" title="Permalink to this definition"></a></dt>
+<dd><p>Read all files in a folder.
+Specify the filetype (e.g. h5, csv).</p>
+<dl class="simple">
+<dt>root<span class="classifier">str</span></dt><dd><p>Path to the folder.</p>
+</dd>
+<dt>filetype<span class="classifier">str</span></dt><dd><p>File type to be read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Yue Wu.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
