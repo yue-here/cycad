@@ -75,11 +75,14 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.autocorrelate">
 <span class="sig-name descname"><span class="pre">autocorrelate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">samples</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkg_subtract</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.autocorrelate" title="Permalink to this definition"></a></dt>
-<dd><p>Apply autocorrelation to self.df to generate correlation matrix</p>
-<dl class="simple">
-<dt>samples<span class="classifier">int</span></dt><dd><p>Number of samples to use for downsampling</p>
-</dd>
-<dt>bkg_subtract<span class="classifier">bool</span></dt><dd><p>Whether to apply baseline correction first</p>
+<dd><p>Apply autocorrelation to self.df to generate correlation matrix.
+Store the correlation matrix in self.correlation_matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>samples</strong> (<em>int</em>) – Number of samples to use for the downsampled output</p></li>
+<li><p><strong>bkg_subtract</strong> (<em>bool</em>) – Whether to apply baseline correction to the data</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -88,14 +91,26 @@
 <dt class="sig sig-object py" id="cycad.cycad.baseline_arPLS">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">baseline_arPLS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lam</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.baseline_arPLS" title="Permalink to this definition"></a></dt>
 <dd><p>Baseline correction routine</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>y</strong> (<em>numpy.ndarray</em>) – Data to be baseline corrected</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.bkg_subtract">
 <span class="sig-name descname"><span class="pre">bkg_subtract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.bkg_subtract" title="Permalink to this definition"></a></dt>
-<dd><p>Apply baseline correction to a dataframe</p>
-<dl class="simple">
-<dt>df<span class="classifier">pandas.DataFrame</span></dt><dd><p>Dataframe to be corrected</p>
+<dd><p>Apply baseline correction to a dataframe using the arPLS algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<em>pandas.DataFrame</em>) – Dataframe to be baseline corrected</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Baseline corrected dataframe</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -103,18 +118,27 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.generate_distance_matrix">
 <span class="sig-name descname"><span class="pre">generate_distance_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.generate_distance_matrix" title="Permalink to this definition"></a></dt>
-<dd><p>Generate a distance matrix from a single dimensional array, e.g. e-chem data</p>
-<p>TODO: add in data file reading</p>
+<dd><p>Generate a distance matrix from the single dimensional array stored in self.df_echem.
+This would usally be the cycling potentials.</p>
+<p># TODO: add in data file reading</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.get_skip">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_skip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.get_skip" title="Permalink to this definition"></a></dt>
 <dd><p>Get the number of rows to skip in a mpt file</p>
-<dl class="simple">
-<dt>file<span class="classifier">str</span></dt><dd><p>Path to the mpt file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>str</em>) – Path to a mpt file</p></li>
+<li><p><strong>encoding</strong> (<em>str</em>) – Encoding of the mpt file</p></li>
+</ul>
 </dd>
-<dt>encoding<span class="classifier">str</span></dt><dd><p>Encoding of the mpt file</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Number of rows to skip</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -123,8 +147,15 @@
 <dt class="sig sig-object py" id="cycad.cycad.natural_sort">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">natural_sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.natural_sort" title="Permalink to this definition"></a></dt>
 <dd><p>Sort a list of strings in a human friendly way.</p>
-<dl class="simple">
-<dt>l<span class="classifier">list</span></dt><dd><p>List of strings to be sorted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>l</strong> (<em>list</em>) – list of strings to be sorted</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>sorted list of strings</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>
@@ -134,8 +165,15 @@
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parse_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.parse_filename" title="Permalink to this definition"></a></dt>
 <dd><p>Parse a file name to get the sample name.
 Overwrite for specific data if you want to use the dataframe directly</p>
-<dl class="simple">
-<dt>filename<span class="classifier">str</span></dt><dd><p>File name to be parsed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – string containing a file name</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>string containing the sample name</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -144,12 +182,23 @@ Overwrite for specific data if you want to use the dataframe directly</p>
 <dt class="sig sig-object py" id="cycad.cycad.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Plot the full correlation matrix and the components</p>
-<dl class="simple">
-<dt>qmin<span class="classifier">float</span></dt><dd><p>Minimum quantile to use for the color scale</p>
-</dd>
-<dt>qmax<span class="classifier">float</span></dt><dd><p>Maximum quantile to use for the color scale</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>qmin</strong> (<em>float</em>) – Minimum quantile to use for the color scale</p></li>
+<li><p><strong>qmax</strong> (<em>float</em>) – Maximum quantile to use for the color scale</p></li>
+<li><p><strong>echem</strong> (<em>bool</em>) – Whether to plot the echem data</p></li>
+<li><p><strong>echem_alpha</strong> (<em>float</em>) – Opacity of the echem overlay</p></li>
+<li><p><strong>echem_quantile</strong> (<em>float</em>) – Quantile to use for the echem overlay (how close should the voltages be in the highlighted region)</p></li>
+</ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="cycad.cycad.plot_echem">
+<span class="sig-name descname"><span class="pre">plot_echem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">echem_quantile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.plot_echem" title="Permalink to this definition"></a></dt>
+<dd><p>Plot the full correlation matrix and the components</p>
 </dd></dl>
 
 <dl class="py method">
@@ -157,9 +206,10 @@ Overwrite for specific data if you want to use the dataframe directly</p>
 <span class="sig-name descname"><span class="pre">read_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parse_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_data" title="Permalink to this definition"></a></dt>
 <dd><p>Read data from a list of files found by read_folder.
 Takes the first column of the first file as the x-values.
-Filetype is specified in read_folder.</p>
-<dl class="simple">
-<dt>parse_names<span class="classifier">bool</span></dt><dd><p>If True, parse file names for column headings</p>
+Filetype is specified by self.read_folder().</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parse_names</strong> (<em>bool</em>) – If True, parse file names for column headings</p>
 </dd>
 </dl>
 </dd></dl>
@@ -167,9 +217,10 @@ Filetype is specified in read_folder.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.read_data_csv">
 <span class="sig-name descname"><span class="pre">read_data_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_data_csv" title="Permalink to this definition"></a></dt>
-<dd><p>Read data from a single csv file</p>
-<dl class="simple">
-<dt>path<span class="classifier">str</span></dt><dd><p>Path to the csv file</p>
+<dd><p>Read a dataset to self.df from a single csv file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to the csv file</p>
 </dd>
 </dl>
 </dd></dl>
@@ -180,8 +231,12 @@ Filetype is specified in read_folder.</p>
 <dd><p>Read cycling data from an echem mpt file
 If this is called multiple times, the data will be concatenated
 The data are resampled to the size of the data dataframe in self.generate_distance_matrix()</p>
-<dl class="simple">
-<dt>path<span class="classifier">str</span></dt><dd><p>Path to the mpt file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to the mpt file</p></li>
+<li><p><strong>decimal</strong> (<em>str</em>) – Decimal separator in the mpt file</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -189,12 +244,15 @@ The data are resampled to the size of the data dataframe in self.generate_distan
 <dl class="py method">
 <dt class="sig sig-object py" id="cycad.cycad.read_folder">
 <span class="sig-name descname"><span class="pre">read_folder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filetype</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#cycad.cycad.read_folder" title="Permalink to this definition"></a></dt>
-<dd><p>Read all files in a folder.
-Specify the filetype (e.g. h5, csv).</p>
-<dl class="simple">
-<dt>root<span class="classifier">str</span></dt><dd><p>Path to the folder.</p>
-</dd>
-<dt>filetype<span class="classifier">str</span></dt><dd><p>File type to be read.</p>
+<dd><p>Read a sorted list of files in a folder to self.files.
+Specify the filetype (e.g. h5, csv).
+Filetype is stored in self.filetype.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>root</strong> (<em>str</em>) – Path to a folder containing data files</p></li>
+<li><p><strong>filetype</strong> (<em>str</em>) – Filetype of the files.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

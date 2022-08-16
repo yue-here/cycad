@@ -1,4 +1,5 @@
 # CYCAD - CYCling Autocorrelation Dataviz
+# 0.0.6a
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -32,10 +33,10 @@ class cycad:
         '''
         Sort a list of strings in a human friendly way.
 
-        Parameters
-        ----------
-        l : list
-            List of strings to be sorted.
+        :param l: list of strings to be sorted
+        :type l: list
+        :return: sorted list of strings
+        :rtype: list
         '''
         convert = lambda text: int(text) if text.isdigit() else text.lower()
         alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
@@ -47,26 +48,24 @@ class cycad:
         Parse a file name to get the sample name.
         Overwrite for specific data if you want to use the dataframe directly
 
-        Parameters
-        ----------
-        filename : str
-            File name to be parsed.
+        :param filename: string containing a file name
+        :type filename: str
+        :return: string containing the sample name
+        :rtype: str
         '''
     # return str(int(filename.split('.')[-2].split('_')[-1]))
         return filename.split('-')[1].split('_')[0]
 
     def read_folder(self, root, filetype):
         '''
-        Read all files in a folder.
+        Read a sorted list of files in a folder to self.files.
         Specify the filetype (e.g. h5, csv).
+        Filetype is stored in self.filetype.
         
-        Parameters
-        ----------
-        root : str
-            Path to the folder.
-
-        filetype : str
-            File type to be read.
+        :param root: Path to a folder containing data files
+        :type root: str
+        :param filetype: Filetype of the files.
+        :type filetype: str
         '''
         self.root = root
         self.runname = os.path.normpath(self.root).split(os.path.sep)[-1]
@@ -77,12 +76,10 @@ class cycad:
         '''
         Read data from a list of files found by read_folder.
         Takes the first column of the first file as the x-values.
-        Filetype is specified in read_folder.
+        Filetype is specified by self.read_folder().
 
-        Parameters
-        ----------
-        parse_names : bool
-            If True, parse file names for column headings
+        :param parse_names: If True, parse file names for column headings
+        :type parse_names: bool
         '''
         try:
             maxfiles = len(self.files)
@@ -148,12 +145,10 @@ class cycad:
 
     def read_data_csv(self, path):
         '''
-        Read data from a single csv file
+        Read a dataset to self.df from a single csv file
 
-        Parameters
-        ----------
-        path : str
-            Path to the csv file
+        :param path: Path to the csv file
+        :type path: str
         '''
         self.df = pd.read_csv(path)
         self.df.rename({self.df.columns[0]: 'x'}, axis=1, inplace=True)
@@ -166,10 +161,10 @@ class cycad:
         If this is called multiple times, the data will be concatenated
         The data are resampled to the size of the data dataframe in self.generate_distance_matrix()
 
-        Parameters
-        ----------
-        path : str
-            Path to the mpt file
+        :param path: Path to the mpt file
+        :type path: str
+        :param decimal: Decimal separator in the mpt file
+        :type decimal: str
         '''
         # Speed up encoding detection
         with open(path, 'rb') as f:
@@ -190,6 +185,9 @@ class cycad:
     def baseline_arPLS(y, ratio=1e-6, lam=100, niter=10, full_output=False):
         '''
         Baseline correction routine
+
+        :param y: Data to be baseline corrected
+        :type y: numpy.ndarray
         '''
         L = len(y)
         diag = np.ones(L - 2)
@@ -222,12 +220,12 @@ class cycad:
 
     def bkg_subtract(self, df):
         '''
-        Apply baseline correction to a dataframe
+        Apply baseline correction to a dataframe using the arPLS algorithm
 
-        Parameters
-        ----------
-        df : pandas.DataFrame
-            Dataframe to be corrected
+        :param df: Dataframe to be baseline corrected
+        :type df: pandas.DataFrame
+        :return: Baseline corrected dataframe
+        :rtype: pandas.DataFrame
         '''
         # Define cutoffs if necessary
         start, end = None, None
@@ -244,12 +242,12 @@ class cycad:
         '''
         Get the number of rows to skip in a mpt file
 
-        Parameters
-        ----------
-        file : str
-            Path to the mpt file
-        encoding : str
-            Encoding of the mpt file
+        :param file: Path to a mpt file
+        :type file: str
+        :param encoding: Encoding of the mpt file
+        :type encoding: str
+        :return: Number of rows to skip
+        :rtype: int
         '''
         skip = 0
         with open(file, 'r', encoding=encoding) as f:
@@ -262,15 +260,13 @@ class cycad:
             
     def autocorrelate(self, samples=None, bkg_subtract=False):
         '''
-        Apply autocorrelation to self.df to generate correlation matrix
+        Apply autocorrelation to self.df to generate correlation matrix.
+        Store the correlation matrix in self.correlation_matrix.
 
-        Parameters
-        ----------
-        samples : int
-            Number of samples to use for downsampling
-
-        bkg_subtract : bool
-            Whether to apply baseline correction first
+        :param samples: Number of samples to use for the downsampled output
+        :type samples: int
+        :param bkg_subtract: Whether to apply baseline correction to the data
+        :type bkg_subtract: bool
         '''
 
         if bkg_subtract:
@@ -301,9 +297,10 @@ class cycad:
 
     def generate_distance_matrix(self):
         '''
-        Generate a distance matrix from a single dimensional array, e.g. e-chem data
+        Generate a distance matrix from the single dimensional array stored in self.df_echem.
+        This would usally be the cycling potentials.
 
-        TODO: add in data file reading
+        # TODO: add in data file reading
 
         '''
         try:
@@ -329,12 +326,16 @@ class cycad:
         '''
         Plot the full correlation matrix and the components
 
-        Parameters
-        ----------
-        qmin : float
-            Minimum quantile to use for the color scale
-        qmax : float
-            Maximum quantile to use for the color scale
+        :param qmin: Minimum quantile to use for the color scale
+        :type qmin: float
+        :param qmax: Maximum quantile to use for the color scale
+        :type qmax: float
+        :param echem: Whether to plot the echem data
+        :type echem: bool
+        :param echem_alpha: Opacity of the echem overlay
+        :type echem_alpha: float
+        :param echem_quantile: Quantile to use for the echem overlay (how close should the voltages be in the highlighted region)
+        :type echem_quantile: float
         '''
         if self.correlation_matrix is not None:
 
@@ -405,3 +406,86 @@ class cycad:
             plt.close(fig)
         else:
             print('No data to plot!')
+
+    def plot_echem(self, qmin=0.15, qmax=0.9, echem=False, echem_alpha=0.2, echem_quantile=0.2):
+        '''
+        Plot the full correlation matrix and the components
+
+        '''
+        if self.correlation_matrix is not None:
+
+            vmin = np.quantile(np.reshape(self.correlation_matrix, -1), qmin)
+            vmax = np.quantile(np.reshape(self.correlation_matrix, -1), qmax)
+
+            fig = plt.figure(figsize=(10, 10), tight_layout=True)
+            gs = GridSpec(5, 8, hspace=0.0, wspace=0.0,
+            width_ratios=[1, 1, 1, 1, 1, 1, 0.2, 0.2], height_ratios=[1, 1, 1, 1, 1])
+
+            # fig, ((ax_x, ax2), (ax3, ax_y)) = plt.subplots(2, 2, figsize=(10,10), constrained_layout=True)
+            ax_main = fig.add_subplot(gs[1:4, 1:5])
+            ax_y = fig.add_subplot(gs[1:4, 5])
+            ax_x = fig.add_subplot(gs[0, 1:5])
+            ax_cbar = fig.add_subplot(gs[1:4, 7])
+            ax_ec_y = fig.add_subplot(gs[1:4, 0])
+            ax_ec_x = fig.add_subplot(gs[4, 1:5])
+            
+
+            main = ax_main.imshow(self.correlation_matrix, norm=LogNorm(vmin=vmin, vmax=vmax), cmap='gray_r', origin='lower', aspect='auto')
+            
+            plt.colorbar(main, cax=ax_cbar)
+            # fig.colorbar(ax_main.imshow(self.correlation_matrix, cmap='viridis', origin='lower'))
+
+            if echem:
+                # ax_main.contour(self.distance_matrix, levels=echem_levels, origin='lower', cmap=echem_cmap)
+                
+                # Use a contourf with transparency
+                # Set cutoff and colourmap manually
+                # Colors can be written as RGBAlpha
+                cutoff = np.quantile(np.reshape(self.correlation_matrix, -1), echem_quantile)
+                ax_main.contourf(self.distance_matrix, levels=[0, cutoff], colors = [(1,0,0,echem_alpha), (0, 0, 0, 0)], origin='lower')
+
+                ax_ec_x.plot(self.df_echem.T)
+                ax_ec_x.set_ylabel('V')
+                ax_ec_x.set_xlim(0, len(self.df_echem.columns))
+
+                x = np.arange(self.df_echem.shape[1])
+                ax_ec_y.plot(self.df_echem.T, x)
+                ax_ec_y.set_xlabel('V')
+                ax_ec_y.set_ylim(0, len(self.df_echem.columns))
+
+            start = 0
+            end = self.df.shape[0] - 1
+            # aspect = len(self.df.columns[1:])/(end - start)
+
+            vmin = self.df[self.df.columns[1]].quantile(qmin)
+            vmax = self.df[self.df.columns[1]].quantile(qmax)
+
+            ax_y.imshow(self.df.iloc[start:end, 1:].T,
+                    extent = [self.df[self.df.columns[0]][start], self.df[self.df.columns[0]][end], 0, self.df.shape[1]],
+                    norm=LogNorm(vmin=vmin, vmax=vmax), origin='lower', aspect='auto')
+
+            ax_x.imshow(self.df.iloc[start:end, 1:],
+                    extent = [0, self.df.shape[1], self.df[self.df.columns[0]][start], self.df[self.df.columns[0]][end]],
+                    norm=LogNorm(vmin=vmin, vmax=vmax), aspect='auto')
+
+            # Set ticks and labels
+            ax_main.set_xlabel('Pattern number')
+            ax_main.set_ylabel('Pattern number')
+            ax_x.set_xticks([])
+            ax_x.set_ylabel('x')
+            ax_y.set_yticks([])
+            ax_y.set_xlabel('x')
+
+            if self.runname:
+                fig.suptitle(self.runname)
+
+            if not os.path.exists('plots'):
+                os.makedirs('plots')
+            fig.savefig(r'./plots/' + self.runname, transparent=False, facecolor='white')
+
+            plt.show()
+        
+            plt.close(fig)
+        else:
+            print('No data to plot!')
+    
