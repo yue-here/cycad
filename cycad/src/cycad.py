@@ -1,5 +1,5 @@
 # CYCAD - CYCling Autocorrelation Dataviz
-# 0.0.6a
+# 1.0.0
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -22,7 +22,7 @@ from tqdm import tqdm
 
 class cycad:
     '''
-    Add docstring
+    The cycad object contains data and methods pertaining to an *in situ* dataset
     '''
 
     def __init__(self):
@@ -58,11 +58,13 @@ class cycad:
 
     def read_folder(self, root, filetype):
         '''
-        Read a sorted list of files in a folder to self.files.
-        Specify the filetype (e.g. h5, csv).
-        Filetype is stored in self.filetype.
+        Read a sorted list of files in a folder to `self.files`. The path is stored as `self.root`. The lowest level folder name is stored as `self.runname` and used as the run name.
+
+        The filetype can be specified currently HDF type (h5, hdf5), or csv type ('csv', 'txt', 'xy', 'xye', 'tsv') are supported. The file type is stored in self.filetype.
+
+        Note: currently for HDF files the data is required to be individual scans with I and 2th keys.
         
-        :param root: Path to a folder containing data files
+        :param root: Path to a folder containing data files.
         :type root: str
         :param filetype: Filetype of the files.
         :type filetype: str
@@ -71,19 +73,21 @@ class cycad:
         self.runname = os.path.normpath(self.root).split(os.path.sep)[-1]
         self.filetype = filetype
         self.files = self.natural_sort(glob.glob(self.root + '/*' + self.filetype))
+        self.read_data()
 
     def read_data(self, parse_names=False):
         '''
         Read data from a list of files found by read_folder.
         Takes the first column of the first file as the x-values.
-        Filetype is specified by self.read_folder().
+        Filetype is specified by :func:`self.read_folder()`.
+
+        The delimited for csv files will be detected automatically.
 
         :param parse_names: If True, parse file names for column headings
         :type parse_names: bool
         '''
         try:
             maxfiles = len(self.files)
-
 
             # Initialize dataframe with x column
             self.df = pd.DataFrame()
@@ -145,7 +149,7 @@ class cycad:
 
     def read_data_csv(self, path):
         '''
-        Read a dataset to self.df from a single csv file
+        Read a dataset to `self.df` from a single csv file
 
         :param path: Path to the csv file
         :type path: str
@@ -159,7 +163,7 @@ class cycad:
         '''
         Read cycling data from an echem mpt file
         If this is called multiple times, the data will be concatenated
-        The data are resampled to the size of the data dataframe in self.generate_distance_matrix()
+        The data are resampled to the size of the data dataframe in self.autocorrelate_ec()
 
         :param path: Path to the mpt file
         :type path: str
@@ -178,6 +182,22 @@ class cycad:
             self.df_echem = pd.concat((self.df_echem, pd.DataFrame(_).T), axis=1)
         except:
             self.df_echem = pd.DataFrame(_).T
+
+    def read_echem_df(self, df):
+        '''
+        Read cycling data from a single-column dataframe or series
+        If this is called multiple times, the data will be concatenated
+        The data are resampled to the size of the data dataframe in self.autocorrelate_ec()
+
+        :param df: Dataframe or series to read
+        :type df: pandas.DataFrame or pandas.Series
+        '''
+
+        try:
+            self.df_echem = pd.concat((self.df_echem, pd.DataFrame(df).T), axis=1)
+        except:
+            self.df_echem = pd.DataFrame(df).T
+
 
 
         
@@ -295,7 +315,7 @@ class cycad:
         except:
             print('Could not generate correlation matrix')
 
-    def generate_distance_matrix(self):
+    def autocorrelate_ec(self):
         '''
         Generate a distance matrix from the single dimensional array stored in self.df_echem.
         This would usally be the cycling potentials.
@@ -308,21 +328,30 @@ class cycad:
 
             pairs = list(combinations(self.df_echem.columns[:], 2))
             array_size = self.df_echem.shape[1]
-            self.distance_matrix = np.zeros((array_size, array_size))
+            self.correlation_matrix_ec = np.zeros((array_size, array_size))
             for i in tqdm(pairs):
                 distance = np.linalg.norm(self.df_echem[i[0]] - self.df_echem[i[1]])
-                self.distance_matrix[self.df_echem.columns.get_loc(i[0])-1, self.df_echem.columns.get_loc(i[1])-1] = distance
-                self.distance_matrix[self.df_echem.columns.get_loc(i[1])-1, self.df_echem.columns.get_loc(i[0])-1] = distance
+                self.correlation_matrix_ec[self.df_echem.columns.get_loc(i[0])-1, self.df_echem.columns.get_loc(i[1])-1] = distance
+                self.correlation_matrix_ec[self.df_echem.columns.get_loc(i[1])-1, self.df_echem.columns.get_loc(i[0])-1] = distance
             
             # # Set the diagonal to one for color consistency
-            # self.distance_matrix[np.diag_indices_from(self.distance_matrix)] = 1
+            # self.correlation_matrix_ec[np.diag_indices_from(self.correlation_matrix_ec)] = 1
 
             # # Raise baseline to zero
-            # self.distance_matrix[self.distance_matrix < 0] = 0.01
+            # self.correlation_matrix_ec[self.correlation_matrix_ec < 0] = 0.01
         except:
             print('Could not generate distance matrix')
 
-    def plot(self, qmin=0.15, qmax=0.9, echem=False, echem_alpha=0.2, echem_quantile=0.2):
+    def plot(
+        self, 
+        qmin=0.15, 
+        qmax=0.9, 
+        echem=False, 
+        echem_alpha=0.2, 
+        echem_quantile=0.2,
+        save=False,
+        filename=None,
+        ):
         '''
         Plot the full correlation matrix and the components
 
@@ -336,113 +365,59 @@ class cycad:
         :type echem_alpha: float
         :param echem_quantile: Quantile to use for the echem overlay (how close should the voltages be in the highlighted region)
         :type echem_quantile: float
+        :param save: Whether to save the figure
+        :type save: bool
+        :param filename: Filename to save the figure as
+        :type filename: str
         '''
         if self.correlation_matrix is not None:
 
+            # Define plot grid with or without echem
+            if echem==False:
+                fig = plt.figure(figsize=(10,10), tight_layout=True)
+                gs = GridSpec(5, 7, hspace=0.0, wspace=0.0,
+                width_ratios=[1, 1, 1, 1, 1, 0.2, 0.2], height_ratios=[1, 1, 1, 1, 1])
+
+                # fig, ((ax_x, ax2), (ax3, ax_y)) = plt.subplots(2, 2, figsize=(10,10), constrained_layout=True)
+                ax_main = fig.add_subplot(gs[1:4, 0:4])
+                ax_y = fig.add_subplot(gs[1:4, 4])
+                ax_x = fig.add_subplot(gs[0, 0:4])
+                ax_cbar = fig.add_subplot(gs[1:4, 6])
+                # ax_ec = fig.add_subplot(gs[4, 0:4])
+
+            # With echem, add extra grid positions and axes ax_ec_x & ..._y
+            else:
+                fig = plt.figure(figsize=(10, 10), tight_layout=True)
+                gs = GridSpec(5, 8, hspace=0.0, wspace=0.0,
+                width_ratios=[1, 1, 1, 1, 1, 1, 0.2, 0.2], height_ratios=[1, 1, 1, 1, 1])
+
+                # fig, ((ax_x, ax2), (ax3, ax_y)) = plt.subplots(2, 2, figsize=(10,10), constrained_layout=True)
+                ax_main = fig.add_subplot(gs[1:4, 1:5])
+                ax_y = fig.add_subplot(gs[1:4, 5])
+                ax_x = fig.add_subplot(gs[0, 1:5])
+                ax_cbar = fig.add_subplot(gs[1:4, 7])
+                ax_ec_y = fig.add_subplot(gs[1:4, 0])
+                ax_ec_x = fig.add_subplot(gs[4, 1:5])
+            
+            # set the colormap limites as quantiles of the data
+            # default to 0.15 and 0.9 to avoid outliers
             vmin = np.quantile(np.reshape(self.correlation_matrix, -1), qmin)
             vmax = np.quantile(np.reshape(self.correlation_matrix, -1), qmax)
 
-            fig = plt.figure(figsize=(10,12), tight_layout=True)
-            gs = GridSpec(6, 7, hspace=0.0, wspace=0.0,
-            width_ratios=[1, 1, 1, 1, 1, 0.2, 0.2], height_ratios=[1, 1, 1, 1, 1, 1])
-
-            # fig, ((ax_x, ax2), (ax3, ax_y)) = plt.subplots(2, 2, figsize=(10,10), constrained_layout=True)
-            ax_main = fig.add_subplot(gs[1:4, 0:4])
-            ax_y = fig.add_subplot(gs[1:4, 4])
-            ax_x = fig.add_subplot(gs[0, 0:4])
-            ax_cbar = fig.add_subplot(gs[1:4, 6])
-            ax_ec = fig.add_subplot(gs[4, 0:4])
-
+            # Plot main correlation matrix on central axis
             main = ax_main.imshow(self.correlation_matrix, norm=LogNorm(vmin=vmin, vmax=vmax), cmap='gray_r', origin='lower', aspect='auto')
             
+            # Add colorbar to the right of the main plot
             plt.colorbar(main, cax=ax_cbar)
-            # fig.colorbar(ax_main.imshow(self.correlation_matrix, cmap='viridis', origin='lower'))
-
-            if echem:
-                # ax_main.contour(self.distance_matrix, levels=echem_levels, origin='lower', cmap=echem_cmap)
-                
+            
+            # Plot echem correlation matrix on top of main axis
+            # plot echem 1-D plots on left and bottom axes
+            if echem:    
                 # Use a contourf with transparency
                 # Set cutoff and colourmap manually
                 # Colors can be written as RGBAlpha
-                cutoff = np.quantile(np.reshape(self.correlation_matrix, -1), echem_quantile)
-                ax_main.contourf(self.distance_matrix, levels=[0, cutoff], colors = [(1,0,0,echem_alpha), (0, 0, 0, 0)], origin='lower')
-
-                ax_ec.plot(self.df_echem.T)
-                ax_ec.set_ylabel('V')
-                ax_ec.set_xlim(0, len(self.df_echem.columns))
-
-            start = 0
-            end = self.df.shape[0] - 1
-            # aspect = len(self.df.columns[1:])/(end - start)
-
-            vmin = self.df[self.df.columns[1]].quantile(qmin)
-            vmax = self.df[self.df.columns[1]].quantile(qmax)
-
-            ax_y.imshow(self.df.iloc[start:end, 1:].T,
-                    extent = [self.df[self.df.columns[0]][start], self.df[self.df.columns[0]][end], 0, self.df.shape[1]],
-                    norm=LogNorm(vmin=vmin, vmax=vmax), origin='lower', aspect='auto')
-
-            ax_x.imshow(self.df.iloc[start:end, 1:],
-                    extent = [0, self.df.shape[1], self.df[self.df.columns[0]][start], self.df[self.df.columns[0]][end]],
-                    norm=LogNorm(vmin=vmin, vmax=vmax), aspect='auto')
-
-            # Set ticks and labels
-            ax_main.set_xlabel('Pattern number')
-            ax_main.set_ylabel('Pattern number')
-            ax_x.set_xticks([])
-            ax_x.set_ylabel('x')
-            ax_y.set_yticks([])
-            ax_y.set_xlabel('x')
-
-            if self.runname:
-                fig.suptitle(self.runname)
-
-            if not os.path.exists('plots'):
-                os.makedirs('plots')
-            fig.savefig(r'./plots/' + self.runname, transparent=False, facecolor='white')
-
-            plt.show()
-        
-            plt.close(fig)
-        else:
-            print('No data to plot!')
-
-    def plot_echem(self, qmin=0.15, qmax=0.9, echem=False, echem_alpha=0.2, echem_quantile=0.2):
-        '''
-        Plot the full correlation matrix and the components
-
-        '''
-        if self.correlation_matrix is not None:
-
-            vmin = np.quantile(np.reshape(self.correlation_matrix, -1), qmin)
-            vmax = np.quantile(np.reshape(self.correlation_matrix, -1), qmax)
-
-            fig = plt.figure(figsize=(10, 10), tight_layout=True)
-            gs = GridSpec(5, 8, hspace=0.0, wspace=0.0,
-            width_ratios=[1, 1, 1, 1, 1, 1, 0.2, 0.2], height_ratios=[1, 1, 1, 1, 1])
-
-            # fig, ((ax_x, ax2), (ax3, ax_y)) = plt.subplots(2, 2, figsize=(10,10), constrained_layout=True)
-            ax_main = fig.add_subplot(gs[1:4, 1:5])
-            ax_y = fig.add_subplot(gs[1:4, 5])
-            ax_x = fig.add_subplot(gs[0, 1:5])
-            ax_cbar = fig.add_subplot(gs[1:4, 7])
-            ax_ec_y = fig.add_subplot(gs[1:4, 0])
-            ax_ec_x = fig.add_subplot(gs[4, 1:5])
-            
-
-            main = ax_main.imshow(self.correlation_matrix, norm=LogNorm(vmin=vmin, vmax=vmax), cmap='gray_r', origin='lower', aspect='auto')
-            
-            plt.colorbar(main, cax=ax_cbar)
-            # fig.colorbar(ax_main.imshow(self.correlation_matrix, cmap='viridis', origin='lower'))
-
-            if echem:
-                # ax_main.contour(self.distance_matrix, levels=echem_levels, origin='lower', cmap=echem_cmap)
-                
-                # Use a contourf with transparency
-                # Set cutoff and colourmap manually
-                # Colors can be written as RGBAlpha
-                cutoff = np.quantile(np.reshape(self.correlation_matrix, -1), echem_quantile)
-                ax_main.contourf(self.distance_matrix, levels=[0, cutoff], colors = [(1,0,0,echem_alpha), (0, 0, 0, 0)], origin='lower')
+                cutoff = np.quantile(np.reshape(self.correlation_matrix_ec, -1), echem_quantile)
+                ax_main.contourf(self.correlation_matrix_ec, levels=[0, cutoff], colors = [(1,0,0,echem_alpha), (0, 0, 0, 0)], origin='lower')
 
                 ax_ec_x.plot(self.df_echem.T)
                 ax_ec_x.set_ylabel('V')
@@ -453,13 +428,18 @@ class cycad:
                 ax_ec_y.set_xlabel('V')
                 ax_ec_y.set_ylim(0, len(self.df_echem.columns))
 
+
+            # Plot in-situ data on right and bottom axes
+
             start = 0
             end = self.df.shape[0] - 1
             # aspect = len(self.df.columns[1:])/(end - start)
 
+            # Calculate color scaling for in-situ data
             vmin = self.df[self.df.columns[1]].quantile(qmin)
             vmax = self.df[self.df.columns[1]].quantile(qmax)
 
+            # Plot in-situ data
             ax_y.imshow(self.df.iloc[start:end, 1:].T,
                     extent = [self.df[self.df.columns[0]][start], self.df[self.df.columns[0]][end], 0, self.df.shape[1]],
                     norm=LogNorm(vmin=vmin, vmax=vmax), origin='lower', aspect='auto')
@@ -476,12 +456,19 @@ class cycad:
             ax_y.set_yticks([])
             ax_y.set_xlabel('x')
 
-            if self.runname:
+            try:
                 fig.suptitle(self.runname)
+            except:
+                pass
 
-            if not os.path.exists('plots'):
-                os.makedirs('plots')
-            fig.savefig(r'./plots/' + self.runname, transparent=False, facecolor='white')
+            if save:
+                if not os.path.exists('plots'):
+                    os.makedirs('plots')
+                
+                if filename == None:
+                    filename = self.runname
+
+                fig.savefig(r'./plots/' + filename, transparent=False, facecolor='white')
 
             plt.show()
         

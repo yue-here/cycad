@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="cycad",                     # This is the name of the package
-    version="0.0.5a",                        # The initial release version
+    version="1.0.0",                        # release version
     author="Yue Wu",                     # Full name of the author
     description="CYCling Autocorrelation Dataviz",
     long_description=long_description,      # Long description read from the the readme file

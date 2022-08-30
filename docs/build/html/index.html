@@ -18,7 +18,8 @@
         <script src="_static/doctools.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,16 +37,12 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">Cycad overview</a></li>
-<li><a class="reference internal" href="#reading-cycad-plots">Reading cycad plots</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
-<li><a class="reference internal" href="#tutorial">Tutorial</a></li>
-<li><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
-<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced usage</a></li>
 </ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -75,62 +72,37 @@
 <p>CYCling Autocorrelation Dataviz</p>
 <p>Cycad is a library for visualizing the autocorrelation from <em>in situ</em> battery cycling meaurements such as X-ray diffraction (XRD) or X-ray absorption spectroscopy. In this documentation, XRD data will be assumed unless otherwise specified.</p>
 <p>The motivation for cycad to clearly show the relationship between battery cycling data at different stages. It does this by calculating the correlation between each pair of measurements in an <em>in situ</em> dataset and plotting it as a heatmap.</p>
+<dl class="simple">
+<dt><a class="reference internal" href="installation.html"><span class="doc">Installation</span></a></dt><dd><p>How to install cycad</p>
+</dd>
+<dt><a class="reference internal" href="tutorial.html"><span class="doc">Tutorial</span></a></dt><dd><p>Learn how to use cycad</p>
+</dd>
+</dl>
 </section>
 <section id="reading-cycad-plots">
 <h1>Reading cycad plots<a class="headerlink" href="#reading-cycad-plots" title="Permalink to this heading"></a></h1>
 <img alt="_images/example3.png" class="align-center" src="_images/example3.png" />
 <ul class="simple">
-<li><p>Plots (1) and (2) show heatmaps of <em>in situ</em> XRD data in two different orientations.</p></li>
-<li><p>Plots (3) and (4) show plots of the cycling voltage in two different orientations.</p></li>
-<li><p>The central plot (5) shows two plots. The underlying plot in grayscale show the Pearson correlation between each pair of measurements in the dataset, with darker regions showing greater correlation (similarity between patterns). The overlaid plot shows a translucent red region that corresponds to pairs of measurements for which the voltage is within a certain range.</p></li>
+<li><p>Subplots (1) and (2) show heatmaps of <em>in situ</em> XRD data in two different orientations.</p></li>
+<li><p>Subplots (3) and (4) show plots of the cycling voltage in two different orientations.</p></li>
+<li><p>The subplot (5) shows two datasets. The underlying plot in grayscale show the Pearson correlation between each pair of measurements in the dataset, with darker regions showing greater correlation (similarity between patterns). The overlaid plot shows a translucent red region that corresponds to pairs of measurements for which the voltage is within a certain range.</p></li>
 <li><p>Interpretation: for a material with stable cycling, similarity between patters should correspond to similar voltages, so the red region should overlay the darker regions below.</p></li>
 </ul>
 </section>
-<section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
-<p>Install the library using pip (preferably in a new virtual environment):</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>conda create -n cycad
-<span class="gp">$ </span>conda activate cycad
-<span class="gp gp-VirtualEnv">(cycad)</span> <span class="gp">$ </span>pip install cycad
-</pre></div>
-</div>
-</section>
-<section id="tutorial">
-<h1>Tutorial<a class="headerlink" href="#tutorial" title="Permalink to this heading"></a></h1>
-<p>For each <em>in situ</em> experiment, create a <code class="docutils literal notranslate"><span class="pre">cycad</span></code> object.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">cycad</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span> <span class="o">=</span> <span class="n">cycad</span><span class="o">.</span><span class="n">cycad</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Use the <code class="docutils literal notranslate"><span class="pre">read_folder()</span></code> method to read a list of data files from a folder and specify the file type to be read. Use <code class="docutils literal notranslate"><span class="pre">read_data()</span></code> to read all data files from the folder into the cycad.df dataframe.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">read_folder</span><span class="p">(</span><span class="s1">&#39;data/&#39;</span><span class="p">,</span> <span class="s1">&#39;csv&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">read_data</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>If electrochemical cycling data is available, use <code class="docutils literal notranslate"><span class="pre">read_echem_mpt(filename)</span></code> to read echem data from a mpt file.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">read_echem_mpt</span><span class="p">(</span><span class="s1">&#39;echem.mpt&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Use <code class="docutils literal notranslate"><span class="pre">autocorrelate()</span></code> and <code class="docutils literal notranslate"><span class="pre">generate_distance_matrix()</span></code> to calculate the autocorrelation matrices for the <em>in situ</em> XRD and cycling voltage data respectively.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">autocorrelate</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">generate_distance_matrix</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>Finally use <code class="docutils literal notranslate"><span class="pre">plot()</span></code> to plot the autocorrelation matrices.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">echem</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="advanced-usage">
-<h1>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading"></a></h1>
+<section id="contents">
+<h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading"></a></h1>
 <div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced usage</a></li>
+</ul>
 </div>
 </section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading"></a></h1>
 <ul class="simple">
 <li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
 </section>
@@ -138,7 +110,9 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 
