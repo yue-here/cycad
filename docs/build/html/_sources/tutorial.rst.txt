@@ -1,6 +1,6 @@
 Tutorial
 ============
-See the tutorial jupyter notebook for a worked example.
+See the tutorial `jupyter notebook <https://github.com/yue-here/cycad/blob/main/examples/cycad_tutorial.ipynb>`_ for a worked example.
 
 **Minimum needs**: a folder containing files representing X-ray diffraction patterns from a *in situ* cycling experiment.
 

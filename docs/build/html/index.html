@@ -81,13 +81,19 @@
 </section>
 <section id="reading-cycad-plots">
 <h1>Reading cycad plots<a class="headerlink" href="#reading-cycad-plots" title="Permalink to this heading"></a></h1>
-<img alt="_images/example3.png" class="align-center" src="_images/example3.png" />
+<img alt="_images/example1b.png" class="align-center" src="_images/example1b.png" />
 <ul class="simple">
-<li><p>Subplots (1) and (2) show heatmaps of <em>in situ</em> XRD data in two different orientations.</p></li>
-<li><p>Subplots (3) and (4) show plots of the cycling voltage in two different orientations.</p></li>
-<li><p>The subplot (5) shows two datasets. The underlying plot in grayscale show the Pearson correlation between each pair of measurements in the dataset, with darker regions showing greater correlation (similarity between patterns). The overlaid plot shows a translucent red region that corresponds to pairs of measurements for which the voltage is within a certain range.</p></li>
+<li><p>Subplots labelled (1) show heatmaps of <em>in situ</em> XRD data in two different orientations.</p></li>
+<li><p>Subplots labelled (2) show plots of the cycling voltage in two different orientations.</p></li>
+<li><p>The main subplot (3) shows two datasets. The underlying plot in grayscale show the Pearson correlation between each pair of measurements in the dataset, with darker regions showing greater correlation (similarity between patterns). The overlaid plot shows a translucent red region that corresponds to pairs of measurements for which the voltage is within a certain range.</p></li>
+<li><p>The progression of <em>in situ</em> data (4) are left to right / bottom to top. The plot is symmetric around the bottom-left to top-right diagonal.</p></li>
 <li><p>Interpretation: for a material with stable cycling, similarity between patters should correspond to similar voltages, so the red region should overlay the darker regions below.</p></li>
 </ul>
+</section>
+<section id="how-cycad-works">
+<h1>How cycad works<a class="headerlink" href="#how-cycad-works" title="Permalink to this heading"></a></h1>
+<img alt="_images/example_correlation.png" class="align-center" src="_images/example_correlation.png" />
+<p>Each pixel of the main cycad plot (3) is a Pearson correlation coefficient between two measurements - i.e. how similar they are. Correlation is on a scale of 1 to 0, where perfect similarity has a correlation of 1. This figure gives an example - two patterns at similar points on the charge/discharge cycle have a correlation of 0.97, while patterns at dissimilar points have a much lower correlation of &lt; 0.4.</p>
 </section>
 <section id="contents">
 <h1>Contents<a class="headerlink" href="#contents" title="Permalink to this heading"></a></h1>
