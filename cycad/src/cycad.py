@@ -1,5 +1,5 @@
 # CYCAD - CYCling Autocorrelation Dataviz
-# 1.0.0
+# 1.0.1
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt

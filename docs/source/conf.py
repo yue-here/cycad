@@ -15,7 +15,7 @@ sys.path.insert(0, os.path.abspath('../../cycad/src'))
 project = 'cycad'
 copyright = '2022, Yue Wu'
 author = 'Yue Wu'
-release = '0.0.5a'
+# release = '1.0.1'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
