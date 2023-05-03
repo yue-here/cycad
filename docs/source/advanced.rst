@@ -2,7 +2,7 @@ Advanced usage
 ===============
 Instead of reading data from a folder, you can add data to the cycad object directly. You can also read out the correlation matrices and plot them separately.
 
-Once read, raw *_*in situ* data is stored in the ``cycad.df`` attribute as a pandas dataframe. The first column is the x-axis and the subsequent columns represent individual 1-D data series. You can also add a dataframe to the cycad object directly:
+Once read, raw *in situ* data is stored in the ``cycad.df`` attribute as a pandas dataframe. The first column is the x-axis and the subsequent columns represent individual 1-D data series. You can also add a dataframe to the cycad object directly:
 
 .. code-block:: python
     
