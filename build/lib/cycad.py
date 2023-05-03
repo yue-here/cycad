@@ -1,5 +1,5 @@
 # CYCAD - CYCling Autocorrelation Dataviz
-# 1.1.0
+# 1.1.1
 import csv
 import glob
 import os
@@ -75,13 +75,7 @@ class cycad:
         self.root = root
         self.runname = os.path.normpath(self.root).split(os.path.sep)[-1]
         self.filetype = filetype
-        if range:
-            self.files = self.natural_sort(glob.glob(self.root + "/*" + self.filetype))[
-                range[0] : range[1]
-            ]
-        else:
-            self.files = self.natural_sort(glob.glob(self.root + "/*" + self.filetype))
-
+        self.files = self.natural_sort(glob.glob(self.root + "/*" + self.filetype))
         self.read_data()
 
     def read_data(self, parse_names=False):

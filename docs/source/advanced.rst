@@ -10,7 +10,7 @@ Once read, raw *in situ* data is stored in the ``cycad.df`` attribute as a panda
     run = cycad()
     run.df = example_dataframe
 
-1-D electrochemical elechrochemical data is stored in the ``cycad.df_echem`` as a single-row, multi-column dataframe. You can pass a single-column dataframe to the cycad object using :meth:`cycad.cycad.read_echem_df()` method, or add it directly as a transpose of a column.
+1-D electrochemical data is stored in the ``cycad.df_echem`` dataframe as a single-row, multi-column dataframe. You can pass a single-column dataframe to the cycad object using :meth:`cycad.cycad.read_echem_df()` method, or add it directly as a transpose of a column.
 
 .. code-block:: python
     
@@ -31,3 +31,4 @@ After generating the correlation matrices, you can access them directly for plot
     plt.show()
 
 .. image:: _static/advanced.png
+
