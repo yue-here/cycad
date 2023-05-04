@@ -32,3 +32,16 @@ After generating the correlation matrices, you can access them directly for plot
 
 .. image:: _static/advanced.png
 
+In a complex pattern, it might be useful to obtain correlations from smaller regions of the data (for example, if diffraction from both anode and cathode are present). In this case, the built in ``df.corr()`` dataframe method can be used to obtain the correlations in a smaller regions of the data.
+
+.. code-block:: python
+    
+    windowed_matrix = run.df[100:200].corr()
+
+The ``cycad.plot()`` method can also be used to plot the matrices but first the new correlation matrix must be added to the cycad object. In the above case, this could be used: ``run.correlation_matrix = windowed_matrix``. An use case might be to generate a series of correlation matrices from different regions of the data:
+
+.. code-block:: python
+
+    k = 10 # number of regions
+    n = run.df.shape[0]//k # calculate window size
+    windowed_matrices = [run.df[i*n:(i+1)*n].corr() for i in range(k-1)]
